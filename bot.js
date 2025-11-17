@@ -3,7 +3,6 @@ const { Bot } = require('@maxhub/max-bot-api');
 
 const bot = new Bot(process.env.BOT_TOKEN);
 
-// === КАТЕГОРИИ (ТОЧНЫЕ НАЗВАНИЯ) ===
 const categories = {
     'гастрономия': {
         title: 'Гастрономия Омска',
@@ -84,7 +83,6 @@ const categories = {
     }
 };
 
-// === ФОРМАТИРОВАНИЕ КАТЕГОРИИ ===
 function formatCategory(key) {
     const cat = categories[key];
     let msg = `${cat.title}\n\nЗдесь вы найдёте:\n\n`;
@@ -94,7 +92,6 @@ function formatCategory(key) {
     return msg;
 }
 
-// === /start ===
 bot.command('start', async (ctx) => {
     await ctx.reply(
         `Омск: Гид по городу\n\n` +
@@ -111,7 +108,6 @@ bot.command('start', async (ctx) => {
     );
 });
 
-// === ПОИСК КАТЕГОРИИ — ТОЛЬКО ПО ТОЧНОМУ НАЗВАНИЮ ===
 function findCategory(text) {
     const lowerText = text.toLowerCase().trim();
 
@@ -126,7 +122,6 @@ function findCategory(text) {
     return null;
 }
 
-// === Сообщения ===
 bot.on('message_created', async (ctx) => {
     const query = ctx.message.body?.text?.trim();
     if (!query) return;
@@ -135,7 +130,7 @@ bot.on('message_created', async (ctx) => {
     if (catKey) {
         await ctx.reply(formatCategory(catKey));
     } else {
-        // Любое другое — на Яндекс.Карты
+
         const encodedQuery = query.replace(/\s+/g, '+');
         const mapUrl = `https://yandex.ru/maps/?text=${encodedQuery}+Омск&z=12`;
         await ctx.reply(
